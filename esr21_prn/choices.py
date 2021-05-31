@@ -54,3 +54,13 @@ MED_RESPONSIBILITY = (
     ('all', 'Both Doctor or Nurse and Traditional Healer'),
     ('none', 'No known medical care received (family/friends only)'),
 )
+
+OFF_STUDY_REASON = (
+    ('death', 'Death'),
+    ('ltfu', 'Lost to follow up'),
+    ('sponsor_terminated', 'Study terminated by sponsor'),
+    ('subject_withdrawal', 'Withdrawal by subject'),
+    ('pregnancy', 'Pregnancy'),
+    ('adverse_event', 'Adverse Event'),
+    (OTHER, 'Other, specify'),
+)
