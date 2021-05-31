@@ -19,15 +19,19 @@ from ..action_items import SUBJECT_OFFSTUDY_ACTION
 from ..choices import OFF_STUDY_REASON
 
 
-class SubjectOffstudy(OffScheduleModelMixin, ActionModelMixin, BaseUuidModel):
+class SubjectOffStudy(OffScheduleModelMixin, ActionModelMixin, BaseUuidModel):
 
     """ A model completed by the user that completed when the subject is taken
         off-study.
     """
 
-    tracking_identifier_prefix = 'OS'
-
     action_name = SUBJECT_OFFSTUDY_ACTION
+
+    tracking_identifier_prefix = 'SO'
+
+    subject_identifier = models.CharField(
+        max_length=50,
+        unique=True)
 
     offstudy_date = models.DateField(
         verbose_name='Date of completion or discontinuation',
@@ -73,13 +77,18 @@ class SubjectOffstudy(OffScheduleModelMixin, ActionModelMixin, BaseUuidModel):
         blank=True,
         null=True)
 
+    def natural_key(self):
+        return (self.subject_identifier)
+
+    natural_key.dependencies = ['sites.Site']
+
     objects = SubjectIdentifierManager()
 
     history = HistoricalRecords()
 
     def save(self, *args, **kwargs):
         self.consent_version = None
-        super(SubjectOffstudy, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def take_off_schedule(self):
         on_schedule = django_apps.get_model('esr21_subject.onschedule')
@@ -90,4 +99,5 @@ class SubjectOffstudy(OffScheduleModelMixin, ActionModelMixin, BaseUuidModel):
 
     class Meta:
         app_label = 'esr21_prn'
+        verbose_name = 'Subject Off Study'
         verbose_name_plural = 'Subject Off Study'

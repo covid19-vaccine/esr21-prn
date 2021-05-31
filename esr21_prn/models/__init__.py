@@ -1,2 +1,2 @@
 from .death_report import DeathReport
-from .subject_offstudy import SubjectOffstudy
+from .subject_offstudy import SubjectOffStudy

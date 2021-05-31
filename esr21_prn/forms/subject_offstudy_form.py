@@ -1,5 +1,6 @@
 from django import forms
-from ..models import SubjectOffstudy
+
+from ..models import SubjectOffStudy
 
 
 class SubjectOffStudyForm(forms.ModelForm):
@@ -9,5 +10,5 @@ class SubjectOffStudyForm(forms.ModelForm):
         widget=forms.TextInput(attrs={'readonly': 'readonly'}))
 
     class Meta:
-        model = SubjectOffstudy
+        model = SubjectOffStudy
         fields = '__all__'

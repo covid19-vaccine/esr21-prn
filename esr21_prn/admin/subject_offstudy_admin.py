@@ -1,16 +1,18 @@
 from django.contrib import admin
-from edc_base.modeladmin_mixins import audit_fieldset_tuple
+from edc_model_admin import audit_fieldset_tuple
 
+from .modeladmin_mixins import ModelAdminMixin
 from ..admin_site import esr21_prn_admin
 from ..forms import SubjectOffStudyForm
-from ..models import SubjectOffstudy
-from .modeladmin_mixins import ModelAdminMixin
+from ..models import SubjectOffStudy
 
 
-@admin.register(SubjectOffstudy, site=esr21_prn_admin)
+@admin.register(SubjectOffStudy, site=esr21_prn_admin)
 class SubjectOffStudyAdmin(ModelAdminMixin, admin.ModelAdmin):
 
     form = SubjectOffStudyForm
+
+    search_fields = ('subject_identifier',)
 
     fieldsets = (
         (None, {
