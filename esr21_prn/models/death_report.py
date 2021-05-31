@@ -1,16 +1,21 @@
 from django.db import models
 
+from edc_action_item.model_mixins import ActionModelMixin
 from edc_base.model_mixins import BaseUuidModel
 from edc_base.sites import SiteModelMixin
-from edc_identifier.model_mixins import NonUniqueSubjectIdentifierFieldMixin
 from edc_base.utils import get_utcnow
 from edc_constants.choices import YES_NO
-from ..choices import CAUSE_OF_DEATH, CAUSE_OF_DEATH_CAT, MED_RESPONSIBILITY, \
-    HOSPITILIZATION_REASONS
+
+from ..action_items import DEATH_REPORT_ACTION
+from ..choices import CAUSE_OF_DEATH, CAUSE_OF_DEATH_CAT, MED_RESPONSIBILITY
+from ..choices import HOSPITILIZATION_REASONS
 
 
-class DeathReport(NonUniqueSubjectIdentifierFieldMixin,
-                  SiteModelMixin, BaseUuidModel):
+class DeathReport(SiteModelMixin, ActionModelMixin, BaseUuidModel):
+
+    action_name = DEATH_REPORT_ACTION
+
+    tracking_identifier_prefix = 'DR'
 
     report_datetime = models.DateTimeField(
         verbose_name='Report Date and Time',

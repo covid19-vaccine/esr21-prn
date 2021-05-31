@@ -2,19 +2,16 @@ from django.contrib import admin
 from django.db import models
 from django.forms import Textarea
 
-from edc_model_admin import ModelAdminBasicMixin
 from edc_model_admin.model_admin_audit_fields_mixin import audit_fieldset_tuple
-from simple_history.admin import SimpleHistoryAdmin
 
 from ..forms import DeathReportForm
 from ..models import DeathReport
 from ..admin_site import esr21_prn_admin
+from .modeladmin_mixins import ModelAdminMixin
 
 
 @admin.register(DeathReport, site=esr21_prn_admin)
-class DeathReportAdmin(ModelAdminBasicMixin,
-                       SimpleHistoryAdmin,
-                       admin.ModelAdmin):
+class DeathReportAdmin(ModelAdminMixin, admin.ModelAdmin):
 
     form = DeathReportForm
 
@@ -27,6 +24,7 @@ class DeathReportAdmin(ModelAdminBasicMixin,
     fieldsets = (
         (None, {
             'fields': (
+                'subject_identifier',
                 'report_datetime',
                 'death_date',
                 'cause_of_death',
@@ -41,7 +39,9 @@ class DeathReportAdmin(ModelAdminBasicMixin,
                 'reason_participant_hospitalized',
                 'reason_participant_hospitalized_other',
                 'period_hospitalized',
-                'comments',)}),
+                'comments',
+            ),
+        }),
         audit_fieldset_tuple)
 
     radio_fields = {'cause_of_death': admin.VERTICAL,
@@ -49,5 +49,8 @@ class DeathReportAdmin(ModelAdminBasicMixin,
                     'description': admin.VERTICAL,
                     'medical_responsibility': admin.VERTICAL,
                     'participant_hospitalized': admin.VERTICAL,
-                    'reason_participant_hospitalized': admin.VERTICAL,
-                    }
+                    'reason_participant_hospitalized': admin.VERTICAL, }
+
+    list_display = ('subject_identifier', 'death_date')
+
+    search_fields = ('subject_identifier', )
