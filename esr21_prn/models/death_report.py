@@ -8,7 +8,7 @@ from edc_constants.choices import YES_NO
 
 from ..action_items import DEATH_REPORT_ACTION
 from ..choices import CAUSE_OF_DEATH, CAUSE_OF_DEATH_CAT, MED_RESPONSIBILITY
-from ..choices import HOSPITILIZATION_REASONS
+from ..choices import HOSPITALIZATION_REASON
 
 
 class DeathReport(SiteModelMixin, ActionModelMixin, BaseUuidModel):
@@ -34,7 +34,9 @@ class DeathReport(SiteModelMixin, ActionModelMixin, BaseUuidModel):
 
     cause_of_death_other = models.CharField(
         verbose_name='Other, specify',
-        max_length=50,)
+        max_length=50,
+        blank=True,
+        null=True)
 
     perform_autopsy = models.CharField(
         verbose_name='Will an autopsy be performed later',
@@ -58,7 +60,9 @@ class DeathReport(SiteModelMixin, ActionModelMixin, BaseUuidModel):
 
     description_other = models.CharField(
         verbose_name='Other, specify',
-        max_length=50,)
+        max_length=50,
+        blank=True,
+        null=True)
 
     duration_acute_illness = models.IntegerField(
         verbose_name='Duration of acute illness directly causing death',
@@ -77,20 +81,28 @@ class DeathReport(SiteModelMixin, ActionModelMixin, BaseUuidModel):
 
     reason_participant_hospitalized = models.CharField(
         max_length=65,
-        choices=HOSPITILIZATION_REASONS,
-        verbose_name='Was the participant hospitalised before death?')
+        choices=HOSPITALIZATION_REASON,
+        verbose_name='Why was the participant hospitalised before death?',
+        blank=True,
+        null=True)
 
     reason_participant_hospitalized_other = models.CharField(
         verbose_name='If other illness or pathogen specify or non '
                      'infectious reason, please specify',
-        max_length=50,)
+        max_length=50,
+        blank=True,
+        null=True)
 
     period_hospitalized = models.IntegerField(
         verbose_name='For how many days was the participant hospitalised '
-                     'during the illness immediately before death?',)
+                     'during the illness immediately before death?',
+        blank=True,
+        null=True)
 
     comments = models.TextField(
-        verbose_name='Comments',)
+        verbose_name='Comments',
+        blank=True,
+        null=True)
 
     class Meta:
         app_label = 'esr21_prn'
