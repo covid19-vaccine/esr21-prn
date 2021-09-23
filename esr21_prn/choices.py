@@ -25,26 +25,9 @@ CAUSE_OF_DEATH_CAT = (
     (OTHER, 'Other, specify'),
 )
 
-HOSPITILIZATION_REASONS = (
-    ('respiratory illness(unspecified)', 'Respiratory Illness(unspecified)'),
-    ('respiratory illness, cxr confirmed',
-     'Respiratory Illness, CXR confirmed'),
-    ('respiratory illness, cxr confirmed, bacterial pathogen, specify',
-     'Respiratory Illness, CXR confirmed, bacterial pathogen, specify'),
-    ('respiratory illness, cxr confirmed, tb or probable tb',
-     'Respiratory Illness, CXR confirmed, TB or probable TB'),
-    ('diarrhea illness(unspecified)', 'Diarrhea Illness(unspecified)'),
-    ('diarrhea illness, viral or bacterial pathogen, specify',
-     'Diarrhea Illness, viral or bacterial pathogen, specify'),
-    ('sepsis(unspecified)', 'Sepsis(unspecified)'),
-    ('sepsis, pathogen specified, specify',
-     'Sepsis, pathogen specified, specify'),
-    ('mengitis(unspecified)', 'Mengitis(unspecified)'),
-    ('mengitis, pathogen specified, specify',
-     'Mengitis, pathogen specified, specify'),
-    ('non-infectious reason for hospitalization, specify',
-     'Non-infectious reason for hospitalization, specify'),
-    (OTHER, 'Other infection, specify'),
+HOSPITALIZATION_REASON = (
+    ('covid19_related_symptoms', 'COVID-19 related symptoms'),
+    (OTHER, 'Other'),
 )
 
 MED_RESPONSIBILITY = (
