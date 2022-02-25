@@ -9,13 +9,13 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-
-from pathlib import Path
+import os
+import sys
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
-APP_NAME = 'esr21_prn'
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+APP_NAME = 'esr21_prn'
 
 SITE_ID = 1
 # Quick-start development settings - unsuitable for production
@@ -25,7 +25,9 @@ SITE_ID = 1
 SECRET_KEY = '@61fi+s5_!rc#$p*0l@=(e_!fb5=k!e6femsv@5s0^#(r883=0'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
+
+# KEY_PATH = os.path.join(BASE_DIR, 'crypto_fields')
 
 ALLOWED_HOSTS = []
 
@@ -40,6 +42,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'edc_action_item.apps.AppConfig',
+    'edc_sync.apps.AppConfig',
+    'edc_prn.apps.AppConfig',
     'esr21_prn.apps.AppConfig'
 ]
 
@@ -51,6 +56,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'edc_dashboard.middleware.DashboardMiddleware',
+    'edc_subject_dashboard.middleware.DashboardMiddleware',
 ]
 
 ROOT_URLCONF = 'esr21_prn.urls'
@@ -80,8 +87,14 @@ WSGI_APPLICATION = 'esr21_prn.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
+}
+
+DASHBOARD_URL_NAMES = {
+    'subject_listboard_url': 'esr21_dashboard:subject_listboard_url',
+    'screening_listboard_url': 'esr21_dashboard:screening_listboard_url',
+    'subject_dashboard_url': 'esr21_dashboard:subject_dashboard_url',
 }
 
 
@@ -109,7 +122,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Africa/Gaborone'
 
 USE_I18N = True
 
@@ -122,3 +135,17 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+if 'test' in sys.argv:
+
+    class DisableMigrations:
+
+        def __contains__(self, item):
+            return True
+
+        def __getitem__(self, item):
+            return None
+
+    MIGRATION_MODULES = DisableMigrations()
+    PASSWORD_HASHERS = ('django.contrib.auth.hashers.MD5PasswordHasher',)
+    DEFAULT_FILE_STORAGE = 'inmemorystorage.InMemoryStorage'

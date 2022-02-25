@@ -1,10 +1,13 @@
 from django.db import models
 
 from edc_action_item.model_mixins import ActionModelMixin
+from edc_base.model_managers import HistoricalRecords
 from edc_base.model_mixins import BaseUuidModel
 from edc_base.sites import SiteModelMixin
+from edc_base.sites.managers import CurrentSiteManager
 from edc_base.utils import get_utcnow
 from edc_constants.choices import YES_NO
+from edc_identifier.managers import SubjectIdentifierManager
 
 from ..action_items import DEATH_REPORT_ACTION
 from ..choices import CAUSE_OF_DEATH, CAUSE_OF_DEATH_CAT, MED_RESPONSIBILITY
@@ -103,6 +106,20 @@ class DeathReport(SiteModelMixin, ActionModelMixin, BaseUuidModel):
         verbose_name='Comments',
         blank=True,
         null=True)
+
+    def __str__(self):
+        return f'{self.subject_identifier}'
+
+    def natural_key(self):
+        return (self.subject_identifier,)
+
+    natural_key.dependencies = ['sites.Site']
+
+    on_site = CurrentSiteManager()
+
+    objects = SubjectIdentifierManager()
+
+    history = HistoricalRecords()
 
     class Meta:
         app_label = 'esr21_prn'
