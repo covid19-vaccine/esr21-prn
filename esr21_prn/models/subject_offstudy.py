@@ -86,8 +86,12 @@ class SubjectOffStudy(OffScheduleModelMixin, ActionModelMixin, BaseUuidModel):
 
     history = HistoricalRecords()
 
+    @property
+    def consent_model_cls(self):
+        return django_apps.get_model('esr21_subject.informedconsent')
+
     def save(self, *args, **kwargs):
-        self.consent_version = None
+        self.consent_version = self.version
         super().save(*args, **kwargs)
 
     def take_off_schedule(self):
@@ -103,6 +107,16 @@ class SubjectOffStudy(OffScheduleModelMixin, ActionModelMixin, BaseUuidModel):
                         name=onschedule.schedule_name)
                 schedule.take_off_schedule(
                     subject_identifier=self.subject_identifier)
+
+    @property
+    def version(self):
+        try:
+            consent = self.consent_model_cls.objects.filter(
+                subject_identifier=self.subject_identifier).latest('created')
+        except self.consent_model_cls.DoesNotExist:
+            return '3'
+        else:
+            return consent.version
 
     class Meta:
         app_label = 'esr21_prn'
